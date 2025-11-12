@@ -1,0 +1,7 @@
+{
+  "accuracy": 0.22,
+  "total_time": 46.75788736343384,
+  "avg_time_per_sample": 0.9351577472686767,
+  "num_test": 50,
+  "num_train": 291
+}

@@ -227,7 +227,8 @@ class QAOASolver:
                 param_dict[f'γ_{i}'] = params[i]
                 param_dict[f'β_{i}'] = params[self.p + i]
             
-            bound_circuit = qaoa_circuit.bind_parameters(param_dict)
+            # Use assign_parameters for Qiskit 2.x compatibility
+            bound_circuit = qaoa_circuit.assign_parameters(param_dict)
             
             # Transpile and run
             transpiled = transpile(bound_circuit, self.backend)
@@ -256,8 +257,10 @@ class QAOASolver:
             options={'maxiter': self.maxiter}
         )
         
+        # Handle different optimizer result formats
+        num_iter = result.nit if hasattr(result, 'nit') else result.get('nfev', 'unknown')
         logger.info(f"Optimization completed: success={result.success}, "
-                   f"iterations={result.nit}, energy={result.fun:.4f}")
+                   f"iterations={num_iter}, energy={result.fun:.4f}")
         
         # Get best solution
         optimal_params = result.x
@@ -266,7 +269,7 @@ class QAOASolver:
             param_dict[f'γ_{i}'] = optimal_params[i]
             param_dict[f'β_{i}'] = optimal_params[self.p + i]
         
-        bound_circuit = qaoa_circuit.bind_parameters(param_dict)
+        bound_circuit = qaoa_circuit.assign_parameters(param_dict)
         transpiled = transpile(bound_circuit, self.backend)
         job = self.backend.run(transpiled, shots=self.shots)
         final_result = job.result()
