@@ -6,9 +6,8 @@ Solves the DTW path selection QUBO using QAOA (Quantum Approximate Optimization 
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.circuit import Parameter
-from qiskit_aer import Aer
+from qiskit_aer import Aer, AerSimulator
 from qiskit.compiler import transpile
-from qiskit.primitives import Sampler
 from scipy.optimize import minimize
 from typing import Dict, Tuple, List
 import logging
